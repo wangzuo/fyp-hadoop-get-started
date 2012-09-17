@@ -25,6 +25,9 @@
     section img {
       max-width: 800px;
     }
+    section {
+      margin-bottom: 5px;
+    }
   </style>
 </head>
 
@@ -67,7 +70,7 @@
 
 <div class="slide far-future">
   <header>Parallel programming</header>
-  <section class="hbox">
+  <section>
     <ul>
 <li>serial vs. parallel</li>
 <li>program processing broke into parts, each of which can be executed concurrently (different CPUs/cores)</li>
@@ -79,7 +82,7 @@
 
 <div class="slide far-future">
   <header>MapReduce</header>
-  <section class="hbox">
+  <section>
     <ul>
 <li>Programming model for data processing</li>
 <li><strong>Abstraction</strong> that allows engineers to perform simple computations while hiding the details of <strong>parallelization</strong>, <strong>data distribution</strong>, <strong>load balancing</strong> and <strong>fault tolerance</strong> in a library</li>
@@ -102,15 +105,9 @@ reduce  (k2, list(v2))  -&gt; list(v2)
 
 
   </section>
-</div>
 
-
-
-<div class="slide far-future">
-  <header>Word Count Example</header>
-  <section class="hbox">
-    
-<pre><code>
+  <section>
+    <pre><code>
 map(String key, String value):
   // key: document name
   // value: document contents
@@ -139,7 +136,7 @@ reduce(String key, Iterator values):
 
 
 <div class="slide far-future">
-  <header><Word Count execution</header>
+  <header>Word Count Execution</header>
   <section class="hbox">
     
 <p><img src="http://www.confusedcoders.com/wp-content/uploads/2012/08/wordcount.png" alt="image" /></p>
@@ -152,7 +149,9 @@ reduce(String key, Iterator values):
   <header>About the sorting</header>
   <section class="hbox">
     
-<p>When a reduce worker has read all intermediate data, it sorts it by the intermediate keys so that all occurrences of the same key are grouped together. The sorting is needed because typically many different keys map to the same reduce task. If the amount of intermediate data is too large to fit in memory, an external sort is used.</p>
+<ul>
+  <li>When a reduce worker has read all intermediate data, it sorts it by the intermediate keys so that all occurrences of the same key are grouped together.</li>
+  <li>The sorting is needed because typically many different keys map to the same reduce task. If the amount of intermediate data is too large to fit in memory, an external sort is used.</li></ul>
 
   </section>
 </div>
@@ -172,29 +171,17 @@ reduce(String key, Iterator values):
 </li>
 </ul>
 
+  </section>
+  <section>
 <img src="http://pentahoadmin.files.wordpress.com/2010/08/hadoopelephant_rgb1.png">
-  </section>
-</div>
-
-
-<div class="slide far-future">
-  <header>MapReduce Execution in Hadoop</header>
-  <section class="hbox">
-    <ul>
-<li>A single reduce task</li>
-<li>Multiple reduce tasks</li>
-<li>No reduce task</li>
-</ul>
-
-
-  </section>
+</section>
 </div>
 
 
 <div class="slide far-future">
   <header>HDFS</header>
   <section class="hbox">
-    ul>
+    <ul>
 <li>Hadoop Distributed File System</li>
 <li>Distributed file system (network file system)</li>
 </ul>
@@ -206,15 +193,12 @@ reduce(String key, Iterator values):
 
 <div class="slide far-future">
   <header>Hadoop Installation</header>
-  <section class="hbox">
-    
-<h3>Java</h3>
 
-<p>Sun Java on Ubuntu linux, Hadoop not compatible with open SDK, to install sun java on ubuntu linux, refer to <a href="https://github.com/flexiondotorg/oab-java6">oab-java6</a></p>
-
-<h3>linux</h3>
-
-<p>linux is the only supported production environment</p>
+<section>
+  <h3>linux</h3>
+<p>
+Sun Java on Ubuntu linux - refer to <a href="https://github.com/flexiondotorg/oab-java6">oab-java6</a><br>
+linux is the only supported production environment</p>
 
 <pre><code>
 $ tar xzf hadoop-x.y.z.tar.gz
@@ -223,7 +207,9 @@ $ export HADOOP_INSTALL
 $ export PATH=$PATH:$HADOOP_INSTALL/bin
 $ hadoop version
 </code></pre>
+</section>
 
+<section>
 <h3>mac</h3>
 
 <p>only for development</p>
@@ -239,27 +225,34 @@ brew install hadoop
   <header>Hadoop Configuration</header>
   <section class="hbox">
     
-<h3>Standalone (local) mode</h3>
-
 <ul>
-<li>no daemons</li>
-<li>single JVM</li>
-<li>development purpose</li>
-</ul>
+  <li>
 
+    <strong>Standalone (local) mode</strong>
 
-<h3>Pseudo-distributed mode</h3>
+    <ul>
+      <li>no daemons</li>
+      <li>single JVM</li>
+      <li>development purpose</li>
+    </ul>
+  </li>
 
-<ul>
-<li>local machine</li>
-<li>simulating a cluster on a small scale</li>
-</ul>
+  <li>
+    <strong>Pseudo-distributed mode</strong>
 
+    <ul>
+      <li>local machine</li>
+      <li>simulating a cluster on a small scale</li>
+    </ul>
+  </li>
 
-<h3>Fully distrubted mode</h3>
+  <li>
+    <strong>Fully distrubted mode</strong>
 
-<ul>
-<li>cluster of machines</li>
+    <ul>
+      <li>cluster of machines</li>
+    </ul>
+  </li>
 </ul>
 
 
@@ -268,16 +261,21 @@ brew install hadoop
 
 
 <div class="slide far-future">
-  <header>Hadoop configuration files</header>
+  <header>Hadoop Configuration Files</header>
   <section class="hbox">
     
-<p> /usr/local/Cellar/hadoop/1.0.3/libexec/conf/</p>
+<ul> 
+  <li>/usr/local/Cellar/hadoop/1.0.3/libexec/conf/</li>
 
-<ul>
-<li>hadoop-env.sh</li>
-<li>core-site.xml</li>
-<li>hdfs-site.xml</li>
-<li>mapred-site.xml</li>
+  <li>
+    Some configuration files
+    <ul>
+      <li>hadoop-env.sh</li>
+      <li>core-site.xml</li>
+      <li>hdfs-site.xml</li>
+      <li>mapred-site.xml</li>
+    </ul>
+  </li>
 </ul>
   </section>
 </div>
@@ -287,24 +285,13 @@ brew install hadoop
   <header>Word Count with Hadoop</header>
   <section class="hbox">
     
-<p><a href="http://hadoop.apache.org/docs/current/api/org/apache/hadoop/mapreduce/Mapper.html">Mapper Interface</a></p>
+<ul>
+  <li><a href="http://hadoop.apache.org/docs/current/api/org/apache/hadoop/mapreduce/Mapper.html">Mapper Interface</a></li>
+  <li><a href="http://hadoop.apache.org/docs/current/api/org/apache/hadoop/mapreduce/Reducer.html">Reducer Interface</a></li>
+  <li><a href="http://hadoop.apache.org/docs/r0.20.2/api/org/apache/hadoop/mapreduce/Mapper.Context.html">Mapper.Content</a></li>
 
-<pre><code>
-  public class Mapper&lt;KEYIN, VALUEIN, KEYOUT, VALUEOUT&gt;
-</code></pre>
-
-<p><a href="http://hadoop.apache.org/docs/current/api/org/apache/hadoop/mapreduce/Reducer.html">Reducer Interface</a></p>
-
-<pre><code>
-  public class Reducer&lt;KEYIN, VALUEIN, KEYOUT, VALUEOUT&gt;
-</code></pre>
-
-<p><a href="http://hadoop.apache.org/docs/r0.20.2/api/org/apache/hadoop/mapreduce/Mapper.Context.html">Mapper.Content</a></p>
-
-<pre><code>
-  public class Mapper.Context extends MapContext&lt;KEYIN, VALUEIN, KEYOUT, VALUEOUT&gt;
-</code></pre>
-  </section>
+</ul>
+</section>
 </div>
 
 
@@ -312,34 +299,41 @@ brew install hadoop
 <div class="slide far-future">
   <header>Java Code</header>
   <section class="hbox">
-    
-<p><a href="WordCount.java">WordCount.java</a></p>
+    <ul>
+<li><a href="WordCount.java">WordCount.java</a></li>
 
-<p><a href="http://en.wikipedia.org/wiki/Generics_in_Java">Java Generics</a></p>
+<li><a href="http://en.wikipedia.org/wiki/Generics_in_Java">Java Generics</a></li>
 
-<p><a href="http://docs.oracle.com/javase/tutorial/java/javaOO/nested.html">Java nested classes</a></p>
+<li><a href="http://docs.oracle.com/javase/tutorial/java/javaOO/nested.html">Java nested classes</a></li>
 
-<p>Hadoop provides its own set of basic types optimized for network serialization</p>
+<li>Hadoop provides its own set of basic types optimized for network serialization
 
 <ul>
 <li>LongWritable: Java Long</li>
 <li>Text: Java String</li>
 <li>IntWritable: Java Integer</li>
 </ul>
+
+</li>
+
+</ul>
   </section>
 </div>
 
 
 <div class="slide far-future">
-  <header>Java Code</header>
+  <header>Java Code: Reducer</header>
   <section class="hbox">
-    
-<p><a href="http://hadoop.apache.org/docs/r0.20.1/api/org/apache/hadoop/mapreduce/Reducer.html">Reducer</a></p>
+ <ul>   
+<li><a href="http://hadoop.apache.org/docs/r0.20.1/api/org/apache/hadoop/mapreduce/Reducer.html">Reducer</a></li>
 
+<li>Execution
 <ul>
 <li><strong>Shuffle</strong>: The reducer copies the sorted output from each Mapper using HTTP across the network</li>
 <li><strong>Sort</strong>: The framework merge sorts Reducer inputs by keys. The shuffle and sort phases occur simultaneously i.e. while outputs are being fetched they are merged.</li>
 <li><strong>Reduce</strong>: Reducer.reduce() method called for each &lt;key, (collection of values)>; The output of the Reducer is not re-sorted.</li>
+</ul>
+</li>
 </ul>
   </section>
 </div>
@@ -350,9 +344,11 @@ brew install hadoop
   <section class="hbox">
     
 <pre><code>
-$ javac -classpath /path/to/hadoop-x.y.z/hadoop-core-x.y.z.jar WordCount.java
+$ javac -classpath /path/to/hadoop-x.y.z/hadoop-core-x.y.z.jar \
+$ WordCount.java
 $ jar cvf WordCount.jar *.class
-$ hadoop jar WordCount.jar WordCount wordcount/input wordcount/output
+$ hadoop jar WordCount.jar WordCount \
+$ inputwords outputwords
 </code></pre>
   </section>
 </div>
@@ -362,48 +358,20 @@ $ hadoop jar WordCount.jar WordCount wordcount/input wordcount/output
 <div class="slide far-future">
   <header>Pseuco-Distributed Mode</header>
   <section class="hbox">
-    
-<pre><code>ssh-keygen -t rsa -P ""
-cat $HOME/.ssh/id_rsa.pub &gt;&gt; $HOME/.ssh/authorized_keys
-ssh localhost
+  <ul>  
+    <li>Setting passwordless ssh
+<pre><code>
+$ ssh-keygen -t rsa -P ""
+$ cat $HOME/.ssh/id_rsa.pub &gt;&gt; \
+$ $HOME/.ssh/authorized_keys
+$ ssh localhost
 </code></pre>
+</li>
 
-<p>core-site.xml</p>
-
-<pre><code>&lt;?xml version="1.0"?&gt;
-&lt;!-- core-site.xml --&gt;
-&lt;configuration&gt;
-    &lt;property&gt;
-        &lt;name&gt;fs.default.name&lt;/name&gt;
-        &lt;value&gt;hdfs://localhost/&lt;/value&gt;
-    &lt;/property&gt;
-&lt;/configuration&gt;
-</code></pre>
-
-<p>hdfs-site.xml</p>
-
-<pre><code>&lt;?xml version="1.0"?&gt; 
-&lt;!-- hdfs-site.xml --&gt;
-&lt;configuration&gt;
-    &lt;property&gt;
-        &lt;name&gt;dfs.replication&lt;/name&gt;
-        &lt;value&gt;1&lt;/value&gt;
-    &lt;/property&gt;
-&lt;/configuration&gt;
-</code></pre>
-
-<p>mapred-site.xml</p>
-
-<pre><code>&lt;?xml version="1.0"?&gt;
-&lt;!-- mapred-site.xml --&gt;
-&lt;configuration&gt;
-    &lt;property&gt;
-        &lt;name&gt;mapred.job.tracker&lt;/name&gt;
-        &lt;value&gt;localhost:8021&lt;/value&gt;
-    &lt;/property&gt;
-&lt;/configuration&gt;
-</code></pre>
-
+<li>core-site.xml</li>
+<li>mapred-site.xml</li>
+<li>hdfs-site.xml</li>
+</ul>
   </section>
 </div>
 
@@ -411,32 +379,44 @@ ssh localhost
 <div class="slide far-future">
   <header>Execution</header>
   <section class="hbox">
-    
-<pre><code>$ clear /tmp/hadoop* (clear datanode)
+    <ul>
 
+      <li>
+<pre><code>$ rm /tmp/hadoop* # clear datanode
 $ hadoop namenode -format
-
-
 $ start-all.sh
 $ jps
 $ ps ax | grep hadoop | wc -l
 </code></pre>
+</li>
 
-<p>NameNode - http://localhost:50070</p>
+<li>NameNode - http://localhost:50070</li>
 
-<p>JobTracker - http://localhost:50030</p>
-
+<li>JobTracker - http://localhost:50030</li>
+<li>
 <pre><code>$ hadoop dfs -mkdir inputwords
 $ hadoop dfs -put input inputwords
-
 $ hadoop jar WordCount.jar WordCount inputwords outputwords
-$ hadoopo fs -cat wordcount/output/part-r-0000
+$ hadoopo fs -cat wordcount/output/*
 $ stop-all.sh
 </code></pre>
+</li>
+
+</ul>
   </section>
 </div>
 
 
+
+<div class="slide far-future">
+  <header>Resources</header>
+  <section class="hbox">
+    <ul>
+      <li><a href="http://aws.amazon.com/elasticmapreduce/">Amazon Elastic MapReduce</a></li>
+      <li><a href="http://shop.oreilly.com/product/9780596521981.do">Hadoop: The Definitive Guide</a></li>
+    </ul>
+  </section>
+</div>
 
     </div> <!-- slides -->
   </div> <!-- presentation -->
