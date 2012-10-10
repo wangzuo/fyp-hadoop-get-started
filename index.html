@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Getting Started with Hadoop</title>
+
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <script src="./scripts/box2d.min.js"></script>
+  <script src="./scripts/jquery-1.4.2.js"></script>
+  <script src="./scripts/slide-presentation.js"></script>
+  <script src="./scripts/slide-content.js"></script>
+  <script src="./scripts/worker-lib.js"></script>
+
+    <!--
+    <script src="http://www.google.com/jsapi"></script>
+  -->
+  <link rel="stylesheet" href="css/slide-presentation.css">
+  <link rel="stylesheet" href="css/slide-content.css">
+    <!--
+    <link href='http://fonts.googleapis.com/css?family=Molengo|Yanone+Kaffeesatz|Droid+Serif|OFL+Sorts+Mill+Goudy+TT|Inconsolata|Lobster|Cantal|Josefin+Sans+Std+Light|Reenie+Beanie' rel='stylesheet' type='text/css'>
+  -->
+  <style type="text/css">
+    section img {
+      max-width: 800px;
+    }
+    section {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="presentation">
+
+    <div class="slides">
+
+      <div class="slide current">
+        <section class="center">
+          <div class="titleContent">
+            <h2 class="titleTitle">
+              <strong class="html5">Getting Started with Hadoop</strong>
+            </h2>
+            <p class="titleText">
+              Wang Zuo<br>
+              September 2012<br><br>
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <div class="slide far-future">
+        <header>Big Data!</header>
+        <section class="hbox">
+
+          <ul>
+            <li><strong>&ldquo;More data usually beats better algorithms&rdquo;</strong></li>
+            <li>Data storage &amp; analysis challenge
+              <ul>
+                <li>Storage: data replication in case of failure</li>
+                <li>Analysis: MapReduce programming model</li>
+              </ul>
+            </li>
+          </ul>
+
+        </section>
+      </div>
+
+
+<div class="slide far-future">
+  <header>Parallel programming</header>
+  <section>
+    <ul>
+<li>serial vs. parallel</li>
+<li>program processing broke into parts, each of which can be executed concurrently (different CPUs/cores)</li>
+<li><strong>MASTER/SLAVE</strong> pattern</li>
+</ul>
+
+  </section>
+  </div>
+
+<div class="slide far-future">
+  <header>MapReduce</header>
+  <section>
+    <ul>
+<li>Programming model for data processing</li>
+<li><strong>Abstraction</strong> that allows engineers to perform simple computations while hiding the details of <strong>parallelization</strong>, <strong>data distribution</strong>, <strong>load balancing</strong> and <strong>fault tolerance</strong> in a library</li>
+<li>Developed with Google to process large amounts of raw data</li>
+<li><a href="http://static.googleusercontent.com/external_content/untrusted_dlcp/research.google.com/en/us/archive/mapreduce-osdi04.pdf">Dean, Jeff and Ghemawat, Sanjay. <strong>MapReduce: Simplified Data Processing on Large Clusters</strong></a></li>
+</ul>
+
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>Programming Model</header>
+  <section class="hbox">
+    
+<pre><code>map     (k1, v1)        -&gt; list(k2, v2)
+reduce  (k2, list(v2))  -&gt; list(v2)
+</code></pre>
+
+
+  </section>
+
+  <section>
+<pre><code>map(String key, String value):
+  // key: document name
+  // value: document contents
+  for each word w in value:
+      EmitIntermediate(w, "1");
+
+reduce(String key, Iterator values):
+    // key: a word
+    // values: a list of counts
+    int result = 0;
+    for each v in values:
+        result += ParseInt(v);
+    Emit(AsString(result));
+</code></pre>
+  </section>
+</div>
+
+<div class="slide far-future">
+  <header>Execution</header>
+  <section class="hbox">
+    
+<p><img src="http://www.dbthink.com/wp-content/uploads/2010/06//map_reduce_execution_overview.jpg" alt="image" /></p>
+
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>Word Count Execution</header>
+  <section class="hbox">
+    
+<p><img src="http://www.confusedcoders.com/wp-content/uploads/2012/08/wordcount.png" alt="image" /></p>
+
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>About the sorting</header>
+  <section class="hbox">
+    
+<ul>
+  <li>When a reduce worker has read all intermediate data, it sorts it by the intermediate keys so that all occurrences of the same key are grouped together.</li>
+  <li>The sorting is needed because typically many different keys map to the same reduce task. If the amount of intermediate data is too large to fit in memory, an external sort is used.</li></ul>
+
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>Apache Hadoop</header>
+  <section class="hbox">
+    <ul>
+<li>Apache Hadoop</li>
+<li><strong>Reliable shared storage</strong> and <strong>analysis system</strong>
+
+<ul>
+<li>Storage: Hadoop Distributed File System(HDFS)</li>
+<li>Analysis: MapReduce</li>
+</ul>
+</li>
+</ul>
+
+  </section>
+  <section>
+<img src="http://pentahoadmin.files.wordpress.com/2010/08/hadoopelephant_rgb1.png">
+</section>
+</div>
+
+
+<div class="slide far-future">
+  <header>HDFS</header>
+  <section class="hbox">
+  <ul>
+    <li>Hadoop Distributed File System</li>
+    <li>Distributed file system (network file system)</li>
+  </ul>
+
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>HDFS: namenode</header>
+  <section class="hbox">
+    <ul>
+      <li>Master</li>
+      <li>manages the filesystem namespace</li>
+      <li>maintains the filesystem tree and the metadata for all the files and directories in the tree</li>
+      <li>stored persistenly on the local disk: namespace image and the edit log</li>
+    </ul>
+  </section>
+</div>
+
+
+
+<div class="slide far-future">
+  <header>HDFS: datanodes</header>
+  <section class="hbox">
+    <ul>
+      <li>Workers</li>
+      <li>store &amp; retrieve blocks</li>
+    </ul>
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>HDFS: command line</header>
+  <section class="hbox">
+    <ul><li>$ hadoop fs -mkdir</li>
+      <li>$ hadoop fs -ls</li>
+      <li>$ hadoop fs -copyFromLocal input1 hdfs://localhost/user/wangzuo/inputwords</li>
+      <li>$ hadoop fs -copyFromLocal input1 inputwords</li>
+
+    </ul>
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>Hadoop Installation</header>
+
+<section>
+  <h3>linux</h3>
+<p>
+Sun Java on Ubuntu linux - refer to <a href="https://github.com/flexiondotorg/oab-java6">oab-java6</a><br>
+linux is the only supported production environment</p>
+
+<pre><code>$ tar xzf hadoop-x.y.z.tar.gz
+$ export JAVA_HOME=
+$ export HADOOP_INSTALL=
+$ export PATH=$PATH:$HADOOP_INSTALL/bin
+$ hadoop version
+</code></pre>
+</section>
+
+<section>
+<h3>mac</h3>
+
+<p>only for development</p>
+
+<pre><code>
+brew install hadoop
+</code></pre>
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>Hadoop Configuration</header>
+  <section class="hbox">
+    
+<ul>
+  <li>
+
+    <strong>Standalone (local) mode</strong>
+
+    <ul>
+      <li>no daemons</li>
+      <li>single JVM</li>
+      <li>development purpose</li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Pseudo-distributed mode</strong>
+
+    <ul>
+      <li>local machine</li>
+      <li>simulating a cluster on a small scale</li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Fully distrubted mode</strong>
+
+    <ul>
+      <li>cluster of machines</li>
+    </ul>
+  </li>
+</ul>
+
+
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>Hadoop Configuration Files</header>
+  <section class="hbox">
+    
+<ul> 
+  <li>/usr/local/Cellar/hadoop/1.0.3/libexec/conf/</li>
+
+  <li>
+    Some more configuration files
+    <ul>
+      <li>hadoop-env.sh</li>
+      <li>core-site.xml</li>
+      <li>hdfs-site.xml</li>
+      <li>mapred-site.xml</li>
+    </ul>
+  </li>
+</ul>
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>Hadoop Java API</header>
+  <section class="hbox">
+    
+<ul>
+  <li><a href="http://hadoop.apache.org/docs/current/api/org/apache/hadoop/mapreduce/Mapper.html">Mapper Interface</a></li>
+  <li><a href="http://hadoop.apache.org/docs/current/api/org/apache/hadoop/mapreduce/Reducer.html">Reducer Interface</a></li>
+  <li><a href="http://hadoop.apache.org/docs/r0.20.2/api/org/apache/hadoop/mapreduce/Mapper.Context.html">Mapper.Context</a></li>
+
+</ul>
+</section>
+</div>
+
+
+
+<div class="slide far-future">
+  <header>Java Code</header>
+  <section class="hbox">
+    <ul>
+<li><a href="WordCount.java">WordCount.java</a></li>
+
+<li><a href="http://en.wikipedia.org/wiki/Generics_in_Java">Java Generics</a></li>
+
+<li><a href="http://docs.oracle.com/javase/tutorial/java/javaOO/nested.html">Java nested classes</a></li>
+
+<li>Hadoop provides its own set of basic types optimized for network serialization
+
+<ul>
+<li>LongWritable: Java Long</li>
+<li>Text: Java String</li>
+<li>IntWritable: Java Integer</li>
+</ul>
+
+</li>
+
+</ul>
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>Hadoop MapReduce: Reducer</header>
+  <section class="hbox">
+ <ul>   
+<li><a href="http://hadoop.apache.org/docs/r0.20.1/api/org/apache/hadoop/mapreduce/Reducer.html">Reducer</a></li>
+
+<li>Execution
+<ul>
+<li><strong>Shuffle</strong>: The reducer copies the sorted output from each Mapper using HTTP across the network</li>
+<li><strong>Sort</strong>: The framework merge sorts Reducer inputs by keys. The shuffle and sort phases occur simultaneously i.e. while outputs are being fetched they are merged.</li>
+<li><strong>Reduce</strong>: Reducer.reduce() method called for each &lt;key, (collection of values)>; The output of the Reducer is not re-sorted.</li>
+</ul>
+</li>
+</ul>
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>Test Run - Standalone</header>
+  <section class="hbox">
+    
+<pre><code>$ javac -classpath /path/to/hadoop-x.y.z/hadoop-core-x.y.z.jar \
+$ WordCount.java
+$ jar cvf WordCount.jar *.class
+$ hadoop jar WordCount.jar WordCount \
+$ inputwords outputwords
+</code></pre>
+  </section>
+</div>
+
+
+
+<div class="slide far-future">
+  <header>Pseuco-Distributed Mode</header>
+  <section class="hbox">
+  <ul>  
+    <li>Setting passwordless ssh
+<pre><code>$ ssh-keygen -t rsa -P ""
+$ cat $HOME/.ssh/id_rsa.pub &gt;&gt; \
+$ $HOME/.ssh/authorized_keys
+$ ssh localhost
+</code></pre>
+</li>
+
+<li>core-site.xml</li>
+<li>mapred-site.xml</li>
+<li>hdfs-site.xml</li>
+</ul>
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>Execution</header>
+  <section class="hbox">
+    <ul>
+      <li>
+$ hadoop namenode -format<br>
+Format the new distributed-filesystem
+During this operation :
+Name node get start ->
+Name node get formatted ->
+Name node get stopped</li>
+      <li>
+<pre><code>$ rm /tmp/hadoop* # clear datanode
+$ hadoop namenode -format
+$ start-all.sh
+$ jps
+$ ps ax | grep hadoop | wc -l
+$ netstat -an | less
+</code></pre>
+</li>
+
+<li>
+<pre><code>$ hadoop dfs -mkdir inputwords
+$ hadoop dfs -put input inputwords
+$ hadoop jar WordCount.jar WordCount inputwords outputwords
+$ hadoopo fs -cat wordcount/output/*
+$ stop-all.sh
+</code></pre>
+</li>
+
+</ul>
+  </section>
+</div>
+
+<div class="slide far-future">
+  <header>Hadoop-Related Projects</header>
+  <section class="hbox">
+    <ul>
+      <li>Cassandra</li>
+      <li>HBase</li>
+      <li>Pig</li>
+      <li>...</li>
+    </ul>
+  </section>
+</div>d
+
+<div class="slide far-future">
+  <header>Resources</header>
+  <section class="hbox">
+    <ul>
+      <li><a href="http://code.google.com/edu/parallel/mapreduce-tutorial.html">Google Code University
+: Introduction to Parallel Programming and MapReduce
+</a></li>
+      <li><a href="http://wiki.apache.org/hadoop/WordCount">Hadoop Wiki: WordCount Example</a></li>
+      <li><a href="http://aws.amazon.com/elasticmapreduce/">Amazon Elastic MapReduce</a></li>
+      <li><a href="http://shop.oreilly.com/product/9780596521981.do">Hadoop: The Definitive Guide</a></li>
+      <li><a href="http://stackoverflow.com/questions/tagged/hadoop">Stackoverflow: Hadoop</a></li>
+    </ul>
+  </section>
+</div>
+
+    </div> <!-- slides -->
+  </div> <!-- presentation -->
+
+</body>
+</html>
