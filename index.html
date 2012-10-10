@@ -98,8 +98,7 @@
   <header>Programming Model</header>
   <section class="hbox">
     
-<pre><code>
-map     (k1, v1)        -&gt; list(k2, v2)
+<pre><code>map     (k1, v1)        -&gt; list(k2, v2)
 reduce  (k2, list(v2))  -&gt; list(v2)
 </code></pre>
 
@@ -107,8 +106,7 @@ reduce  (k2, list(v2))  -&gt; list(v2)
   </section>
 
   <section>
-    <pre><code>
-map(String key, String value):
+<pre><code>map(String key, String value):
   // key: document name
   // value: document contents
   for each word w in value:
@@ -181,14 +179,51 @@ reduce(String key, Iterator values):
 <div class="slide far-future">
   <header>HDFS</header>
   <section class="hbox">
-    <ul>
-<li>Hadoop Distributed File System</li>
-<li>Distributed file system (network file system)</li>
-</ul>
+  <ul>
+    <li>Hadoop Distributed File System</li>
+    <li>Distributed file system (network file system)</li>
+  </ul>
 
   </section>
 </div>
 
+
+<div class="slide far-future">
+  <header>HDFS: namenode</header>
+  <section class="hbox">
+    <ul>
+      <li>Master</li>
+      <li>manages the filesystem namespace</li>
+      <li>maintains the filesystem tree and the metadata for all the files and directories in the tree</li>
+      <li>stored persistenly on the local disk: namespace image and the edit log</li>
+    </ul>
+  </section>
+</div>
+
+
+
+<div class="slide far-future">
+  <header>HDFS: datanodes</header>
+  <section class="hbox">
+    <ul>
+      <li>Workers</li>
+      <li>store &amp; retrieve blocks</li>
+    </ul>
+  </section>
+</div>
+
+
+<div class="slide far-future">
+  <header>HDFS: command line</header>
+  <section class="hbox">
+    <ul><li>$ hadoop fs -mkdir</li>
+      <li>$ hadoop fs -ls</li>
+      <li>$ hadoop fs -copyFromLocal input1 hdfs://localhost/user/wangzuo/inputwords</li>
+      <li>$ hadoop fs -copyFromLocal input1 inputwords</li>
+
+    </ul>
+  </section>
+</div>
 
 
 <div class="slide far-future">
@@ -200,10 +235,9 @@ reduce(String key, Iterator values):
 Sun Java on Ubuntu linux - refer to <a href="https://github.com/flexiondotorg/oab-java6">oab-java6</a><br>
 linux is the only supported production environment</p>
 
-<pre><code>
-$ tar xzf hadoop-x.y.z.tar.gz
-$ export JAVA_HOME
-$ export HADOOP_INSTALL
+<pre><code>$ tar xzf hadoop-x.y.z.tar.gz
+$ export JAVA_HOME=
+$ export HADOOP_INSTALL=
 $ export PATH=$PATH:$HADOOP_INSTALL/bin
 $ hadoop version
 </code></pre>
@@ -268,7 +302,7 @@ brew install hadoop
   <li>/usr/local/Cellar/hadoop/1.0.3/libexec/conf/</li>
 
   <li>
-    Some configuration files
+    Some more configuration files
     <ul>
       <li>hadoop-env.sh</li>
       <li>core-site.xml</li>
@@ -282,13 +316,13 @@ brew install hadoop
 
 
 <div class="slide far-future">
-  <header>Word Count with Hadoop</header>
+  <header>Hadoop Java API</header>
   <section class="hbox">
     
 <ul>
   <li><a href="http://hadoop.apache.org/docs/current/api/org/apache/hadoop/mapreduce/Mapper.html">Mapper Interface</a></li>
   <li><a href="http://hadoop.apache.org/docs/current/api/org/apache/hadoop/mapreduce/Reducer.html">Reducer Interface</a></li>
-  <li><a href="http://hadoop.apache.org/docs/r0.20.2/api/org/apache/hadoop/mapreduce/Mapper.Context.html">Mapper.Content</a></li>
+  <li><a href="http://hadoop.apache.org/docs/r0.20.2/api/org/apache/hadoop/mapreduce/Mapper.Context.html">Mapper.Context</a></li>
 
 </ul>
 </section>
@@ -322,7 +356,7 @@ brew install hadoop
 
 
 <div class="slide far-future">
-  <header>Java Code: Reducer</header>
+  <header>Hadoop MapReduce: Reducer</header>
   <section class="hbox">
  <ul>   
 <li><a href="http://hadoop.apache.org/docs/r0.20.1/api/org/apache/hadoop/mapreduce/Reducer.html">Reducer</a></li>
@@ -340,11 +374,10 @@ brew install hadoop
 
 
 <div class="slide far-future">
-  <header>Test Run</header>
+  <header>Test Run - Standalone</header>
   <section class="hbox">
     
-<pre><code>
-$ javac -classpath /path/to/hadoop-x.y.z/hadoop-core-x.y.z.jar \
+<pre><code>$ javac -classpath /path/to/hadoop-x.y.z/hadoop-core-x.y.z.jar \
 $ WordCount.java
 $ jar cvf WordCount.jar *.class
 $ hadoop jar WordCount.jar WordCount \
@@ -360,8 +393,7 @@ $ inputwords outputwords
   <section class="hbox">
   <ul>  
     <li>Setting passwordless ssh
-<pre><code>
-$ ssh-keygen -t rsa -P ""
+<pre><code>$ ssh-keygen -t rsa -P ""
 $ cat $HOME/.ssh/id_rsa.pub &gt;&gt; \
 $ $HOME/.ssh/authorized_keys
 $ ssh localhost
@@ -380,19 +412,23 @@ $ ssh localhost
   <header>Execution</header>
   <section class="hbox">
     <ul>
-
+      <li>
+$ hadoop namenode -format<br>
+Format the new distributed-filesystem
+During this operation :
+Name node get start ->
+Name node get formatted ->
+Name node get stopped</li>
       <li>
 <pre><code>$ rm /tmp/hadoop* # clear datanode
 $ hadoop namenode -format
 $ start-all.sh
 $ jps
 $ ps ax | grep hadoop | wc -l
+$ netstat -an | less
 </code></pre>
 </li>
 
-<li>NameNode - http://localhost:50070</li>
-
-<li>JobTracker - http://localhost:50030</li>
 <li>
 <pre><code>$ hadoop dfs -mkdir inputwords
 $ hadoop dfs -put input inputwords
@@ -406,14 +442,29 @@ $ stop-all.sh
   </section>
 </div>
 
-
+<div class="slide far-future">
+  <header>Hadoop-Related Projects</header>
+  <section class="hbox">
+    <ul>
+      <li>Cassandra</li>
+      <li>HBase</li>
+      <li>Pig</li>
+      <li>...</li>
+    </ul>
+  </section>
+</div>d
 
 <div class="slide far-future">
   <header>Resources</header>
   <section class="hbox">
     <ul>
+      <li><a href="http://code.google.com/edu/parallel/mapreduce-tutorial.html">Google Code University
+: Introduction to Parallel Programming and MapReduce
+</a></li>
+      <li><a href="http://wiki.apache.org/hadoop/WordCount">Hadoop Wiki: WordCount Example</a></li>
       <li><a href="http://aws.amazon.com/elasticmapreduce/">Amazon Elastic MapReduce</a></li>
       <li><a href="http://shop.oreilly.com/product/9780596521981.do">Hadoop: The Definitive Guide</a></li>
+      <li><a href="http://stackoverflow.com/questions/tagged/hadoop">Stackoverflow: Hadoop</a></li>
     </ul>
   </section>
 </div>
